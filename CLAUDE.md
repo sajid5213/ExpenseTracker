@@ -23,7 +23,7 @@ There is no test framework or test script configured.
 - Vite + React 19, plain JavaScript (JSX, no TypeScript). Entry: `index.html` → `src/main.jsx` → `src/App.jsx` (rendered inside `StrictMode`).
 - The whole app is a single component in `src/App.jsx`: transaction list state (seeded with hardcoded sample data), add-transaction form state, type/category filters, and derived income/expense/balance totals all live there. There's no persistence; state resets on reload.
 - Transaction shape: `{ id, description, amount, type: "income" | "expense", category, date: "YYYY-MM-DD" }`. Categories come from the `categories` array in `App.jsx`, which drives both the form and the filter dropdowns.
-- `amount` is stored as a **string** (both in the seed data and from the form input), but the totals use `reduce((sum, t) => sum + t.amount, 0)`. That concatenates strings instead of adding numbers, which is the known bug in the summary cards.
+- `amount` is always stored as a **number**. The form input yields a string, so `handleSubmit` converts it with `Number(amount)` before saving; keep that invariant so the totals' `reduce` adds rather than concatenates.
 - Styling: global styles in `src/index.css`, component styles in `src/App.css` (plain CSS, class names like `summary-card`, `income-amount`, `expense-amount`).
 
 ## Lint rules worth knowing
