@@ -21,10 +21,29 @@ There is no test framework or test script configured.
 ## Architecture
 
 - Vite + React 19, plain JavaScript (JSX, no TypeScript). Entry: `index.html` → `src/main.jsx` → `src/App.jsx` (rendered inside `StrictMode`).
-- The whole app is a single component in `src/App.jsx`: transaction list state (seeded with hardcoded sample data), add-transaction form state, type/category filters, and derived income/expense/balance totals all live there. There's no persistence; state resets on reload.
-- Transaction shape: `{ id, description, amount, type: "income" | "expense", category, date: "YYYY-MM-DD" }`. Categories come from the `categories` array in `App.jsx`, which drives both the form and the filter dropdowns.
-- `amount` is always stored as a **number**. The form input yields a string, so `handleSubmit` converts it with `Number(amount)` before saving; keep that invariant so the totals' `reduce` adds rather than concatenates.
-- Styling: global styles in `src/index.css`, component styles in `src/App.css` (plain CSS, class names like `summary-card`, `income-amount`, `expense-amount`).
+### Component tree and data flow
+
+```
+App                 owns: transactions (the only shared state), categories (module constant)
+├── Summary         props: transactions
+├── TransactionForm props: categories, onAdd    owns: form field state
+└── TransactionList props: transactions, categories    owns: filter state
+```
+
+- **Single source of truth:** `App.jsx` holds the transaction list (seeded with hardcoded sample data; no persistence, so it resets on reload). Data flows down as props; the only way up is the `onAdd` callback, which appends to the list.
+- **State lives where it's used:** form field state is local to `TransactionForm`, and filter state is local to `TransactionList`. Only lift state into `App` when another component needs it.
+- `Summary` derives income/expense/balance from the **full** list, so totals ignore the list filters. Nothing derived is stored in state; it's recomputed on each render.
+- `TransactionForm` builds the complete transaction (`id: Date.now()`, today's `date`) before calling `onAdd`, so `App` just stores what it receives.
+- Components are flat in `src/` (one default-exported function component per `.jsx` file, imported with the `.jsx` extension). There's no `components/` folder.
+
+### Data
+
+- Transaction shape: `{ id, description, amount, type: "income" | "expense", category, date: "YYYY-MM-DD" }`. `categories` drives both the form and the filter dropdowns.
+- `amount` is always stored as a **number**. The form input yields a string, so `TransactionForm` converts it with `Number(amount)` before calling `onAdd`; keep that invariant so the totals' `reduce` adds rather than concatenates.
+
+### Styling
+
+Global styles are in `src/index.css`. All component styles are in `src/App.css`, imported once by `App.jsx` and shared by every child (plain CSS, class names like `summary-card`, `income-amount`, `expense-amount`). Child components don't import CSS.
 
 ## Lint rules worth knowing
 
