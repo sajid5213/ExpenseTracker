@@ -27,10 +27,10 @@ There is no test framework or test script configured.
 App                 owns: transactions (the only shared state), categories (module constant)
 ├── Summary         props: transactions
 ├── TransactionForm props: categories, onAdd    owns: form field state
-└── TransactionList props: transactions, categories    owns: filter state
+└── TransactionList props: transactions, categories, onDelete    owns: filter state
 ```
 
-- **Single source of truth:** `App.jsx` holds the transaction list (seeded with hardcoded sample data; no persistence, so it resets on reload). Data flows down as props; the only way up is the `onAdd` callback, which appends to the list.
+- **Single source of truth:** `App.jsx` holds the transaction list (seeded with hardcoded sample data; no persistence, so it resets on reload). Data flows down as props; changes go up only through callbacks: `onAdd` appends a transaction and `onDelete(id)` removes one by `id` from the full list (so it works on filtered views too).
 - **State lives where it's used:** form field state is local to `TransactionForm`, and filter state is local to `TransactionList`. Only lift state into `App` when another component needs it.
 - `Summary` derives income/expense/balance from the **full** list, so totals ignore the list filters. Nothing derived is stored in state; it's recomputed on each render.
 - `TransactionForm` builds the complete transaction (`id: Date.now()`, today's `date`) before calling `onAdd`, so `App` just stores what it receives.
