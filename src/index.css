@@ -5,20 +5,26 @@
 }
 
 :root {
-  --paper: #eef2ee;
-  --sheet: #fbfcfa;
-  --ink: #1b2a41;
-  --ink-muted: #586474;
-  --rule: #d5ddd7;
-  --cover: #0e4d52;
-  --money-in: #1e6b45;
-  --money-out: #a8322a;
+  --page: #e3ebe7;
+  --sheet: #ffffff;
+  --ink: #1c2b4a;
+  --ink-muted: #5a6578;
+  --rule: #dbe3df;
+  --note: #24493f;
+  --note-dark: #1a382f;
+  --note-line: #9cc5b4;
+  --money-in: #1f7a55;
+  --money-in-tint: #e3f2ea;
+  --money-out: #b23c2b;
+  --money-out-tint: #fbe9e6;
+  --serif: "Libre Caslon Text", Georgia, serif;
+  --serif-display: "Libre Caslon Display", "Libre Caslon Text", Georgia, serif;
 }
 
 body {
-  font-family: "Public Sans", system-ui, sans-serif;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
-  line-height: 1.45;
-  background-color: var(--paper);
+  line-height: 1.5;
+  background-color: var(--page);
   color: var(--ink);
 }

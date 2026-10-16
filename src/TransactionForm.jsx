@@ -27,8 +27,26 @@ function TransactionForm({ categories, onAdd }) {
 
   return (
     <div className="add-transaction">
-      <h2>Add Transaction</h2>
+      <h2>Add a transaction</h2>
       <form onSubmit={handleSubmit}>
+        <div className="segmented" role="group" aria-label="Type">
+          <button
+            type="button"
+            className="segment segment-expense"
+            aria-pressed={type === "expense"}
+            onClick={() => setType("expense")}
+          >
+            Expense
+          </button>
+          <button
+            type="button"
+            className="segment segment-income"
+            aria-pressed={type === "income"}
+            onClick={() => setType("income")}
+          >
+            Income
+          </button>
+        </div>
         <input
           type="text"
           placeholder="Description"
@@ -43,16 +61,17 @@ function TransactionForm({ categories, onAdd }) {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-        <select aria-label="Type" value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
         <select aria-label="Category" value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
-        <button type="submit">Add transaction</button>
+        <button type="submit" className="primary-btn">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          Add transaction
+        </button>
       </form>
     </div>
   );

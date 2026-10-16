@@ -1,5 +1,17 @@
 import { useState } from 'react'
 
+const TYPE_FILTERS = [
+  { value: "all", label: "All" },
+  { value: "income", label: "Money in" },
+  { value: "expense", label: "Money out" },
+];
+
+// "2025-01-10" -> "Jan 10, 2025" (parsed as a local date, so it never shifts a day)
+const formatDate = (isoDate) => {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
+
 function TransactionList({ transactions, categories, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -16,15 +28,23 @@ function TransactionList({ transactions, categories, onDelete }) {
     <div className="transactions">
       <h2>Transactions</h2>
       <div className="filters">
-        <select aria-label="Filter by type" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="all">All Types</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
+        <div className="segmented" role="group" aria-label="Filter by type">
+          {TYPE_FILTERS.map(f => (
+            <button
+              key={f.value}
+              type="button"
+              className="segment"
+              aria-pressed={filterType === f.value}
+              onClick={() => setFilterType(f.value)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
         <select aria-label="Filter by category" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-          <option value="all">All Categories</option>
+          <option value="all">All categories</option>
           {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>{cat[0].toUpperCase() + cat.slice(1)}</option>
           ))}
         </select>
       </div>
@@ -47,7 +67,7 @@ function TransactionList({ transactions, categories, onDelete }) {
             <tbody>
               {filteredTransactions.map(t => (
                 <tr key={t.id}>
-                  <td className="date">{t.date}</td>
+                  <td className="date"><time dateTime={t.date}>{formatDate(t.date)}</time></td>
                   <td className="description">{t.description}</td>
                   <td className="category">{t.category}</td>
                   <td className="money income-amount">
@@ -62,8 +82,19 @@ function TransactionList({ transactions, categories, onDelete }) {
                       onClick={() => {
                         if (window.confirm(`Delete "${t.description}"?`)) onDelete(t.id);
                       }}
+                      aria-label={`Delete ${t.description}`}
+                      title="Delete"
                     >
-                      Delete
+                      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                        <path
+                          d="M2.5 4h11M6 4V2.5h4V4M4 4l.7 9.5h6.6L12 4M6.75 6.5v4.5M9.25 6.5v4.5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </button>
                   </td>
                 </tr>

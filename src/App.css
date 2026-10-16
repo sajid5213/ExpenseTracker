@@ -1,65 +1,116 @@
+/* The whole app is one statement sheet on a gray desk. */
+
 .app {
   max-width: 880px;
-  margin: 0 auto;
-  padding: 0 16px 48px;
+  margin: 40px auto;
+  padding: 40px 48px 48px;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
 }
 
 .app-header {
-  margin-bottom: 24px;
-  padding: 36px 28px 32px;
-  color: #fbfcfa;
-  background-color: var(--cover);
-  border-radius: 0 0 12px 12px;
+  margin-bottom: 28px;
 }
 
 h1 {
+  font-family: var(--serif);
   font-size: 34px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-weight: 400;
+  line-height: 1.15;
 }
 
 .subtitle {
-  margin-top: 6px;
+  margin-top: 4px;
   font-size: 16px;
-  color: #bcd3d2;
+  color: var(--ink-muted);
 }
 
 h2 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 14px;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 
-/* Totals strip */
+/* Balance panel: a filled banknote, the one bold element */
 
 .summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid var(--note);
+  border-radius: 10px;
+}
+
+.summary-balance {
+  position: relative;
+  padding: 32px 36px 30px;
+  color: var(--sheet);
+  background: var(--note);
+  /* Fine inner frame line, like the border on a banknote. */
+  box-shadow:
+    inset 0 0 0 7px var(--note),
+    inset 0 0 0 8px rgba(156, 197, 180, 0.5);
+}
+
+.engraving {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--note-line);
+  stroke-width: 0.75;
+  stroke-opacity: 0.5;
+  /* Keep the left side clear so the balance reads cleanly. */
+  -webkit-mask-image: linear-gradient(to right, transparent 28%, #000 72%);
+  mask-image: linear-gradient(to right, transparent 28%, #000 72%);
+  pointer-events: none;
+}
+
+.summary-balance h2 {
+  position: relative;
+  margin-bottom: 4px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: #c6ddd3;
+}
+
+.balance-amount {
+  position: relative;
+  font-family: var(--serif-display);
+  font-size: 64px;
+  line-height: 1;
+  color: var(--sheet);
+}
+
+.balance-amount.expense-amount {
+  color: #ffb4a6;
+}
+
+.summary-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 40px;
+  padding: 16px 36px;
   background: var(--sheet);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
 }
 
-.summary-card {
-  padding: 16px 20px;
+.summary-totals div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
 }
 
-.summary-card + .summary-card {
-  border-left: 1px solid var(--rule);
-}
-
-.summary-card h3 {
+.summary-totals dt {
   font-size: 14px;
-  font-weight: 600;
   color: var(--ink-muted);
-  margin-bottom: 2px;
 }
 
-.summary-card p {
-  font-size: 26px;
-  font-weight: 700;
+.summary-totals dd {
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .income-amount {
@@ -70,20 +121,14 @@ h2 {
   color: var(--money-out);
 }
 
-.balance-amount {
-  color: var(--ink);
-}
-
-/* Sections */
+/* Sections are divided by rules, not boxed. */
 
 .spending-chart,
 .add-transaction,
 .transactions {
-  margin-bottom: 24px;
-  padding: 20px;
-  background: var(--sheet);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
 }
 
 .chart-empty,
@@ -111,11 +156,18 @@ form input,
 form select,
 .filters select {
   min-width: 0;
-  padding: 9px 10px;
+  padding: 9px 12px;
   color: var(--ink);
-  background: #fff;
-  border: 1px solid #b9c5bd;
+  background: var(--sheet);
+  border: 1px solid #c2ccc7;
   border-radius: 6px;
+  transition: border-color 120ms;
+}
+
+form input:hover,
+form select:hover,
+.filters select:hover {
+  border-color: var(--note);
 }
 
 form input[type="text"] {
@@ -131,36 +183,97 @@ form select {
   text-transform: capitalize;
 }
 
-form button {
-  flex: 0 0 auto;
-  padding: 9px 18px;
-  font-weight: 600;
-  color: #fbfcfa;
-  background: var(--cover);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-form button:hover {
-  background: #0a3a3e;
-}
-
 :focus-visible {
-  outline: 2px solid var(--cover);
+  outline: 2px solid var(--money-in);
   outline-offset: 2px;
 }
 
-/* Ledger */
+/* Buttons */
+
+button {
+  cursor: pointer;
+  transition: background-color 120ms, color 120ms, box-shadow 120ms;
+}
+
+.primary-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px 9px 16px;
+  font-weight: 600;
+  color: var(--sheet);
+  background: var(--note);
+  border: none;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.primary-btn:hover {
+  background: var(--note-dark);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* Two- or three-way toggle: Expense / Income, All / Money in / Money out */
+
+.segmented {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  padding: 3px;
+  background: #eef3f1;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+
+.segment {
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  background: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.segment:hover {
+  color: var(--ink);
+}
+
+.segment[aria-pressed="true"] {
+  color: var(--note);
+  font-weight: 600;
+  background: var(--sheet);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+.segment-expense[aria-pressed="true"] {
+  color: var(--money-out);
+  background: var(--money-out-tint);
+  box-shadow: 0 0 0 1px rgba(178, 60, 43, 0.25);
+}
+
+.segment-income[aria-pressed="true"] {
+  color: var(--money-in);
+  background: var(--money-in-tint);
+  box-shadow: 0 0 0 1px rgba(31, 122, 85, 0.25);
+}
+
+/* Transactions */
 
 .filters {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
   margin-bottom: 12px;
 }
 
 .filters select {
-  padding: 7px 10px;
+  padding: 7px 12px;
   font-size: 14px;
 }
 
@@ -184,9 +297,9 @@ td {
 
 th {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink-muted);
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
 }
 
 td.date,
@@ -212,44 +325,46 @@ td.money {
   font-weight: 600;
 }
 
+tbody tr:hover {
+  background: #f4f8f6;
+}
+
 .delete-btn {
-  padding: 4px 10px;
-  font-size: 13px;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
   color: var(--ink-muted);
   background: none;
-  border: 1px solid transparent;
+  border: none;
   border-radius: 6px;
-  cursor: pointer;
 }
 
 .delete-btn:hover {
   color: var(--money-out);
-  border-color: currentColor;
+  background: var(--money-out-tint);
 }
 
 @media (max-width: 560px) {
-  .app-header {
-    margin: 0 -16px 20px;
-    padding: 28px 20px 24px;
+  .app {
+    margin: 0;
+    padding: 28px 16px 36px;
+    border: none;
+    border-radius: 0;
   }
 
   h1 {
     font-size: 28px;
   }
 
-  .summary {
-    grid-template-columns: 1fr;
+  .summary-balance,
+  .summary-totals {
+    padding-left: 22px;
+    padding-right: 22px;
   }
 
-  .summary-card + .summary-card {
-    border-left: none;
-    border-top: 1px solid var(--rule);
-  }
-
-  .spending-chart,
-  .add-transaction,
-  .transactions {
-    padding: 16px;
+  .balance-amount {
+    font-size: 46px;
   }
 
   /* Each transaction becomes a two-line row:
@@ -309,7 +424,17 @@ td.money {
   }
 
   .delete-btn {
-    margin-right: -10px;
+    margin-right: -6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+
+  .primary-btn:active {
+    transform: none;
   }
 }
 
