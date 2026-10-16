@@ -5,11 +5,25 @@ function TransactionForm({ categories, onAdd }) {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("expense");
   const [category, setCategory] = useState("food");
+  const [error, setError] = useState(null); // name of the invalid field, or null
+
+  const errorMessages = {
+    description: "Please enter a description.",
+    amount: "Please enter an amount greater than 0.",
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const value = Number(amount);
-    if (!description.trim() || !(value > 0)) return;
+    if (!description.trim()) {
+      setError("description");
+      return;
+    }
+    if (!(value > 0)) {
+      setError("amount");
+      return;
+    }
+    setError(null);
 
     onAdd({
       id: Date.now(),
@@ -30,7 +44,7 @@ function TransactionForm({ categories, onAdd }) {
   return (
     <div className="add-transaction">
       <h2>Add a transaction</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className="segmented" role="group" aria-label="Type">
           <button
             type="button"
@@ -53,8 +67,13 @@ function TransactionForm({ categories, onAdd }) {
           type="text"
           placeholder="Description"
           aria-label="Description"
+          aria-invalid={error === "description"}
+          aria-describedby={error === "description" ? "form-error" : undefined}
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            if (error === "description") setError(null);
+          }}
         />
         <input
           type="number"
@@ -62,8 +81,13 @@ function TransactionForm({ categories, onAdd }) {
           aria-label="Amount"
           min="0.01"
           step="0.01"
+          aria-invalid={error === "amount"}
+          aria-describedby={error === "amount" ? "form-error" : undefined}
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => {
+            setAmount(e.target.value);
+            if (error === "amount") setError(null);
+          }}
         />
         <select aria-label="Category" value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(cat => (
@@ -77,6 +101,11 @@ function TransactionForm({ categories, onAdd }) {
           Add transaction
         </button>
       </form>
+      {error && (
+        <p id="form-error" className="form-error" role="alert">
+          {errorMessages[error]}
+        </p>
+      )}
     </div>
   );
 }

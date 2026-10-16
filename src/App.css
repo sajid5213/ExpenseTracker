@@ -183,6 +183,16 @@ form select {
   text-transform: capitalize;
 }
 
+form input[aria-invalid="true"] {
+  border-color: var(--money-out);
+}
+
+.form-error {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--money-out);
+}
+
 :focus-visible {
   outline: 2px solid var(--money-in);
   outline-offset: 2px;
