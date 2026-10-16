@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, LabelList, CartesianGrid, ResponsiveContainer } from 'recharts';
 
-const BAR_COLOR = "#2a78d6";
-const formatMoney = (value) => `$${value}`;
+const BAR_COLOR = "#0e4d52";
+const formatMoney = (value) => `$${value.toLocaleString()}`;
 
 function SpendingChart({ transactions }) {
   const totalsByCategory = {};
@@ -23,16 +23,16 @@ function SpendingChart({ transactions }) {
       ) : (
         <ResponsiveContainer width="100%" height={data.length * 40 + 40}>
           <BarChart data={data} layout="vertical" margin={{ top: 0, right: 60, bottom: 0, left: 0 }}>
-            <CartesianGrid horizontal={false} stroke="#eee" />
-            <XAxis type="number" tickFormatter={formatMoney} stroke="#999" fontSize={12} />
-            <YAxis type="category" dataKey="category" width={100} stroke="#999" fontSize={13} tickLine={false} />
+            <CartesianGrid horizontal={false} stroke="#d5ddd7" />
+            <XAxis type="number" tickFormatter={formatMoney} stroke="#586474" fontSize={13} />
+            <YAxis type="category" dataKey="category" style={{ textTransform: "capitalize" }} width={100} stroke="#586474" fontSize={14} tickLine={false} />
             <Tooltip
               formatter={(value) => [formatMoney(value), "Spent"]}
-              itemStyle={{ color: "#333" }}
-              cursor={{ fill: "#f5f5f5" }}
+              itemStyle={{ color: "#1b2a41" }}
+              cursor={{ fill: "#eef2ee" }}
             />
             <Bar dataKey="amount" fill={BAR_COLOR} radius={[0, 4, 4, 0]} barSize={20}>
-              <LabelList dataKey="amount" position="right" formatter={formatMoney} fill="#333" fontSize={13} />
+              <LabelList dataKey="amount" position="right" formatter={formatMoney} fill="#1b2a41" fontSize={14} fontWeight={600} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

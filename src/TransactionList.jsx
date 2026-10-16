@@ -16,12 +16,12 @@ function TransactionList({ transactions, categories, onDelete }) {
     <div className="transactions">
       <h2>Transactions</h2>
       <div className="filters">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+        <select aria-label="Filter by type" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="all">All Types</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+        <select aria-label="Filter by category" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">All Categories</option>
           {categories.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
@@ -29,39 +29,49 @@ function TransactionList({ transactions, categories, onDelete }) {
         </select>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map(t => (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
-              </td>
-              <td>
-                <button
-                  className="delete-btn"
-                  onClick={() => {
-                    if (window.confirm(`Delete "${t.description}"?`)) onDelete(t.id);
-                  }}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {filteredTransactions.length === 0 ? (
+        <p className="list-empty">No transactions match these filters.</p>
+      ) : (
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th className="money">Money in</th>
+                <th className="money">Money out</th>
+                <th><span className="visually-hidden">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTransactions.map(t => (
+                <tr key={t.id}>
+                  <td className="date">{t.date}</td>
+                  <td className="description">{t.description}</td>
+                  <td className="category">{t.category}</td>
+                  <td className="money income-amount">
+                    {t.type === "income" && `$${t.amount.toLocaleString()}`}
+                  </td>
+                  <td className="money expense-amount">
+                    {t.type === "expense" && `$${t.amount.toLocaleString()}`}
+                  </td>
+                  <td>
+                    <button
+                      className="delete-btn"
+                      onClick={() => {
+                        if (window.confirm(`Delete "${t.description}"?`)) onDelete(t.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

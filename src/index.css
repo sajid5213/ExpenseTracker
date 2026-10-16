@@ -4,8 +4,21 @@
   box-sizing: border-box;
 }
 
+:root {
+  --paper: #eef2ee;
+  --sheet: #fbfcfa;
+  --ink: #1b2a41;
+  --ink-muted: #586474;
+  --rule: #d5ddd7;
+  --cover: #0e4d52;
+  --money-in: #1e6b45;
+  --money-out: #a8322a;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  color: #333;
+  font-family: "Public Sans", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+  background-color: var(--paper);
+  color: var(--ink);
 }

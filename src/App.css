@@ -1,82 +1,98 @@
 .app {
-  max-width: 800px;
+  max-width: 880px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 16px 48px;
+}
+
+.app-header {
+  margin-bottom: 24px;
+  padding: 36px 28px 32px;
+  color: #fbfcfa;
+  background-color: var(--cover);
+  border-radius: 0 0 12px 12px;
 }
 
 h1 {
-  margin-bottom: 4px;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .subtitle {
-  margin-bottom: 20px;
-  color: #666;
+  margin-top: 6px;
+  font-size: 16px;
+  color: #bcd3d2;
 }
 
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* Totals strip */
+
 .summary {
-  display: flex;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   margin-bottom: 24px;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
 }
 
 .summary-card {
-  flex: 1;
-  border: 1px solid #ddd;
-  padding: 14px;
-  background: #fff;
+  padding: 16px 20px;
+}
+
+.summary-card + .summary-card {
+  border-left: 1px solid var(--rule);
 }
 
 .summary-card h3 {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-bottom: 2px;
+}
+
+.summary-card p {
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .income-amount {
-  color: green;
-  font-size: 20px;
-  font-weight: bold;
+  color: var(--money-in);
 }
 
 .expense-amount {
-  color: red;
-  font-size: 20px;
-  font-weight: bold;
+  color: var(--money-out);
 }
 
 .balance-amount {
-  font-size: 20px;
-  font-weight: bold;
+  color: var(--ink);
 }
 
-.spending-chart {
-  border: 1px solid #ddd;
-  padding: 16px;
+/* Sections */
+
+.spending-chart,
+.add-transaction,
+.transactions {
   margin-bottom: 24px;
-  background: #fff;
+  padding: 20px;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
 }
 
-.spending-chart h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+.chart-empty,
+.list-empty {
+  color: var(--ink-muted);
+  font-size: 15px;
 }
 
-.chart-empty {
-  color: #888;
-  font-size: 14px;
-}
-
-.add-transaction {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
-  background: #fff;
-}
-
-.add-transaction h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
-}
+/* Form */
 
 form {
   display: flex;
@@ -84,42 +100,58 @@ form {
   flex-wrap: wrap;
 }
 
+input,
+select,
+button {
+  font: inherit;
+  font-size: 15px;
+}
+
 form input,
-form select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+form select,
+.filters select {
+  min-width: 0;
+  padding: 9px 10px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid #b9c5bd;
+  border-radius: 6px;
 }
 
 form input[type="text"] {
-  flex: 2;
+  flex: 2 1 180px;
 }
 
 form input[type="number"] {
-  flex: 1;
+  flex: 1 1 100px;
 }
 
 form select {
-  flex: 1;
+  flex: 1 1 110px;
+  text-transform: capitalize;
 }
 
 form button {
-  padding: 8px 20px;
-  background: #333;
-  color: #fff;
+  flex: 0 0 auto;
+  padding: 9px 18px;
+  font-weight: 600;
+  color: #fbfcfa;
+  background: var(--cover);
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.transactions {
-  margin-bottom: 24px;
+form button:hover {
+  background: #0a3a3e;
 }
 
-.transactions h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+:focus-visible {
+  outline: 2px solid var(--cover);
+  outline-offset: 2px;
 }
+
+/* Ledger */
 
 .filters {
   display: flex;
@@ -128,38 +160,164 @@ form button {
 }
 
 .filters select {
-  padding: 6px;
-  border: 1px solid #ccc;
-  font-size: 13px;
+  padding: 7px 10px;
+  font-size: 14px;
+}
+
+.table-wrap {
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 15px;
 }
 
-thead {
-  background: #f5f5f5;
-}
-
-th, td {
-  padding: 10px;
+th,
+td {
+  padding: 11px 8px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 14px;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
 }
 
 th {
-  font-size: 12px;
-  color: #888;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  border-bottom: 2px solid var(--ink);
+}
+
+td.date,
+td.category {
+  color: var(--ink-muted);
+}
+
+td.category {
+  text-transform: capitalize;
+}
+
+td.description {
+  white-space: normal;
+  width: 100%;
+}
+
+th.money,
+td.money {
+  text-align: right;
+}
+
+td.money {
+  font-weight: 600;
 }
 
 .delete-btn {
   padding: 4px 10px;
-  background: #eee;
-  border: 1px solid #ccc;
+  font-size: 13px;
+  color: var(--ink-muted);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
-  color: #333;
+}
+
+.delete-btn:hover {
+  color: var(--money-out);
+  border-color: currentColor;
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    margin: 0 -16px 20px;
+    padding: 28px 20px 24px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card + .summary-card {
+    border-left: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .spending-chart,
+  .add-transaction,
+  .transactions {
+    padding: 16px;
+  }
+
+  /* Each transaction becomes a two-line row:
+     description and amount, then date, category and delete. */
+  thead {
+    display: none;
+  }
+
+  table,
+  tbody {
+    display: block;
+  }
+
+  tr {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "desc desc money"
+      "date cat  del";
+    column-gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  td {
+    padding: 0;
+    border: none;
+  }
+
+  td.description {
+    grid-area: desc;
+    font-weight: 600;
+  }
+
+  td.money {
+    grid-area: money;
+  }
+
+  td.money:empty {
+    display: none;
+  }
+
+  td.date {
+    grid-area: date;
+    font-size: 13px;
+  }
+
+  td.category {
+    grid-area: cat;
+    font-size: 13px;
+  }
+
+  td:last-child {
+    grid-area: del;
+    justify-self: end;
+  }
+
+  .delete-btn {
+    margin-right: -10px;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
