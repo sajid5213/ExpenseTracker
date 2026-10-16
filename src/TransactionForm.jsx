@@ -8,15 +8,17 @@ function TransactionForm({ categories, onAdd }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!description || !amount) return;
+    const value = Number(amount);
+    if (!description.trim() || !(value > 0)) return;
 
     onAdd({
       id: Date.now(),
-      description,
-      amount: Number(amount),
+      description: description.trim(),
+      amount: value,
       type,
       category,
-      date: new Date().toISOString().split('T')[0],
+      // "en-CA" formats as YYYY-MM-DD in local time (toISOString would use UTC)
+      date: new Date().toLocaleDateString("en-CA"),
     });
 
     setDescription("");
@@ -58,6 +60,8 @@ function TransactionForm({ categories, onAdd }) {
           type="number"
           placeholder="Amount"
           aria-label="Amount"
+          min="0.01"
+          step="0.01"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
